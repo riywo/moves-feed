@@ -58,7 +58,6 @@ app.get('/auth/callback', passport.authenticate('moves', {
 
 app.get('/user',                 ensureAuthenticated,  user.index);
 app.get('/user/summary.atom',    ensureValidFeedToken, user.summary);
-app.get('/user/activities.atom', ensureValidFeedToken, user.activities);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

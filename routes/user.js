@@ -3,13 +3,11 @@ exports.index = function(req, res){
 };
 
 exports.summary = function(req, res) {
-  req.user.summaryAtom(function(atom) {
-    res.send(atom);
-  });
-};
-
-exports.activities = function(req, res) {
-  req.user.activitiesAtom(function(atom) {
+  req.user.summaryAtom(function(err, atom) {
+    if (err) { res.status(500).send(err) };
+    res.set({
+      'Content-Type': 'application/atom+xml'
+    });
     res.send(atom);
   });
 };

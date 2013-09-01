@@ -9,19 +9,29 @@ var userSchema = new Schema({
   refreshToken: { type: String, required: true, unique: true }
 });
 
-
+var Feed = require('feed');
 var moment = require('moment');
 var moves = require('../config/moves');
 
 userSchema.methods.summaryAtom = function(callback) {
   moves.get('/user/summary/daily?pastDays=30', this.accessToken, function(err, res, body) {
-    callback(body);
-  });
-};
+    if (err) { callback(err, null) };
+    var data = JSON.parse(body);
+    var feed = new Feed({
+      title: 'Moves Feed Daily Summary',
+      link:  'http://example.com'
+    });
 
-userSchema.methods.activitiesAtom = function(callback) {
-  moves.get('/user/activities/daily?pastDays=7', this.accessToken, function(err, res, body) {
-    callback(body);
+    data.reverse().forEach(function(daily) {
+      feed.item({
+        title: "Moves Daily Summary " + daily.date,
+        link:  'http://example.com',
+        description: JSON.stringify(daily.summary),
+        date:  moment(daily.date, 'YYYYMMDD').toDate()
+      });
+    });
+
+    callback(null, feed.render('atom-1.0'));
   });
 };
 

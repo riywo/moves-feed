@@ -13,7 +13,8 @@
     "passport-oauth": "~1.0.0",
     "mongoose": "~3.6.18",
     "moment": "~2.1.0",
-    "moves": "0.0.2"
+    "moves": "0.0.2",
+    "feed": "~0.2.5"
   },
   "devDependencies": {
     "express-debug": "~1.0.3"
