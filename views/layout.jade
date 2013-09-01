@@ -1,7 +1,24 @@
-doctype 5
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+title Moves Feed
+meta(name="viewport", content="width=device-width, initial-scale=1.0")
+link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css")
+link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css")
+link(rel="stylesheet" href="/stylesheets/style.css")
+script(src="//code.jquery.com/jquery.js")
+script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js")
+
+div.navbar(class="navbar-inverse navbar-fixed-top")
+  div.container
+    div.navbar-header
+      button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href="#") Moves Feed
+
+    div.collapse(class="navbar-collapse")
+      ul.nav(class="navbar-nav")
+        li.active
+          a(href="#") Home
+
+div.container
+  block content
