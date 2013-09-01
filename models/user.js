@@ -19,13 +19,13 @@ userSchema.methods.summaryAtom = function(callback) {
     var data = JSON.parse(body);
     var feed = new Feed({
       title: 'Moves Feed Daily Summary',
-      link:  'http://example.com'
+      link:  process.env.MOVES_FEED_URL
     });
 
     data.reverse().forEach(function(daily) {
       feed.item({
         title: "Moves Daily Summary " + daily.date,
-        link:  'http://example.com',
+        link:  process.env.MOVES_FEED_URL,
         description: JSON.stringify(daily.summary),
         date:  moment(daily.date, 'YYYYMMDD').toDate()
       });
