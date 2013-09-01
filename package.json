@@ -8,11 +8,12 @@
   "dependencies": {
     "express": "3.3.7",
     "jade": "*",
-    "shakes": "git://github.com/riywo/shakes.git",
     "node-uuid": "~1.4.1",
     "passport": "~0.1.17",
     "passport-oauth": "~1.0.0",
-    "mongoose": "~3.6.18"
+    "mongoose": "~3.6.18",
+    "moment": "~2.1.0",
+    "moves": "0.0.2"
   },
   "devDependencies": {
     "express-debug": "~1.0.3"

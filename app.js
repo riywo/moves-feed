@@ -1,75 +1,11 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-var uuid = require('node-uuid');
 
-var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URL);
-var Schema = mongoose.Schema;
-var userSchema = new Schema({
-  _id:          { type: Number, required: true },
-  feedToken:    { type: String, required: true, unique: true },
-  accessToken:  { type: String, required: true, unique: true },
-  refreshToken: { type: String, required: true, unique: true }
-});
-var User = mongoose.model('User', userSchema);
-
-var Shakes = require('shakes');
-var moves = new Shakes({
-    client_id:     process.env.MOVES_CLIENT_ID,
-    client_secret: process.env.MOVES_CLIENT_SECRET,
-    redirect_uri:  process.env.MOVES_REDIRECT_URI
-});
-
-var passport = require('passport');
-var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
-passport.use('moves', new OAuth2Strategy({
-  authorizationURL: 'moves://app/authorize',
-  tokenURL:         'https://api.moves-app.com/oauth/v1/access_token',
-  clientID:         process.env.MOVES_CLIENT_ID,
-  clientSecret:     process.env.MOVES_CLIENT_SECRET,
-  callbackURL:      process.env.MOVES_REDIRECT_URL
-}, function(accessToken, refreshToken, profile, done) {
-  moves.get('userProfile', {}, accessToken, function(data) {
-    User.findById(data.userId, function(err, user) {
-      if (err) {
-        return done(err, null);
-      }
-
-      if (user == null) {
-        user = new User({
-          _id:       data.userId,
-          feedToken: uuid.v4()
-        });
-      }
-
-      user.accessToken  = accessToken;
-      user.refreshToken = refreshToken;
-      user.save(function(err) {
-        if (err) {
-          return done(err, null);
-        } else {
-          return done(null, user)
-        }
-      });
-    });
-  });
-}));
-passport.serializeUser = function(user, done) {
-  done(null, user.id);
-}
-passport.deserializeUser = function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-}
+var passport = require('./config/passport');
+var User = require('./models/user');
 
 var app = express();
 
