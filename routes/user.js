@@ -9,5 +9,7 @@ exports.summary = function(req, res) {
 };
 
 exports.activities = function(req, res) {
-  res.send(req.user);
+  req.user.activitiesAtom(function(atom) {
+    res.send(atom);
+  });
 };

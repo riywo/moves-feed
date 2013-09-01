@@ -12,8 +12,15 @@ var userSchema = new Schema({
 
 var moment = require('moment');
 var moves = require('../config/moves');
+
 userSchema.methods.summaryAtom = function(callback) {
   moves.get('/user/summary/daily?pastDays=30', this.accessToken, function(err, res, body) {
+    callback(body);
+  });
+};
+
+userSchema.methods.activitiesAtom = function(callback) {
+  moves.get('/user/activities/daily?pastDays=7', this.accessToken, function(err, res, body) {
     callback(body);
   });
 };

@@ -12,7 +12,12 @@ passport.use('moves', new OAuth2Strategy({
   clientSecret:     process.env.MOVES_CLIENT_SECRET,
   callbackURL:      process.env.MOVES_REDIRECT_URL
 }, function(accessToken, refreshToken, profile, done) {
-  moves.get('userProfile', {}, accessToken, function(data) {
+  moves.get('/user/profile', accessToken, function(err, res, body) {
+    if (err) {
+      return done(err, null);
+    }
+
+    var data = JSON.parse(body);
     User.findById(data.userId, function(err, user) {
       if (err) {
         return done(err, null);
