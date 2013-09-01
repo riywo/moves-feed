@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGO_URL);
 var Schema = mongoose.Schema;
 var userSchema = new Schema({
   _id:          { type: Number, required: true },
-  apiToken:     { type: String, required: true, unique: true },
+  feedToken:    { type: String, required: true, unique: true },
   accessToken:  { type: String, required: true, unique: true },
   refreshToken: { type: String, required: true, unique: true }
 });
@@ -45,8 +45,8 @@ passport.use('moves', new OAuth2Strategy({
 
       if (user == null) {
         user = new User({
-          _id:      data.userId,
-          apiToken: uuid.v4()
+          _id:       data.userId,
+          feedToken: uuid.v4()
         });
       }
 
@@ -97,13 +97,32 @@ app.configure('development', function() {
   edt(app, { depth: 10 });
 });
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/')
+}
+
+function ensureValidFeedToken(req, res, next) {
+  User.findOne({feedToken: req.query.token}, function(err, user) {
+    if (err == null && user != null) {
+      req.user = user;
+      return next();
+    } else {
+      res.status(400).send('Invalid Token');
+    }
+  });
+}
+
 app.get('/', routes.index);
-app.get('/auth', passport.authenticate('moves', { scope: 'activity location' }));
+app.get('/auth',          passport.authenticate('moves', { scope: 'activity location' }));
 app.get('/auth/callback', passport.authenticate('moves', {
-  successRedirect: '/',
+  successRedirect: '/user',
   failuerRedirect: '/'
 }));
-app.get('/users', user.list);
+
+app.get('/user',                 ensureAuthenticated,  user.index);
+app.get('/user/summary.atom',    ensureValidFeedToken, user.summary);
+app.get('/user/activities.atom', ensureValidFeedToken, user.activities);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

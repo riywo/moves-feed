@@ -1,8 +1,11 @@
+exports.index = function(req, res){
+  res.render('user', { token: req.user.feedToken });
+};
 
-/*
- * GET users listing.
- */
+exports.summary = function(req, res) {
+  res.send(req.user);
+};
 
-exports.list = function(req, res){
-  res.send("respond with a resource");
+exports.activities = function(req, res) {
+  res.send(req.user);
 };
