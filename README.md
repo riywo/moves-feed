@@ -16,6 +16,14 @@ Access [https://moves-feed.herokuapp.com/](https://moves-feed.herokuapp.com/) fr
 
 Be secure your API token, otherwise anyone who knows your token can get your Feed.
 
+## TODO
+
+- force SSL
+- session store
+- more feeds
+- more detail in feeds
+- token reset
+
 ## License
 
 MIT
