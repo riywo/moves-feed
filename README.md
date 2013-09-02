@@ -4,7 +4,7 @@ Feed for Moves app
 
 ## WARNING!!!
 
-This application is still developing. Not stable, secure. I will improve it later and publish as a Moves Apps.
+This application is still under construction. Not stable, secure. I will improve it later and publish as a Moves Apps.
 
 ## What is this?
 
